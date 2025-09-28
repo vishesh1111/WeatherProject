@@ -1,11 +1,15 @@
 let apiKey = "1e3e8f230b6064d27976e41163a82b77";
+// public rest API2
 
 navigator.geolocation.getCurrentPosition(async function (position) {
-   
+
+
+   // calling the browser for geolocation api 
     try {
         var lat = position.coords.latitude;
-        var lon = position.coords.longitude;
+        var lon = position.coords.longitude;    
         //longitude and  latitude are used to get city name
+       
         var map = await fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=5&appid=${apiKey}`)
         var userdata = await map.json();
         let loc = userdata[0].name;
@@ -16,7 +20,7 @@ navigator.geolocation.getCurrentPosition(async function (position) {
 
         console.log(data);
         
-        // display current weather info
+        // displaying current weather info
         let cityMain = document.getElementById("city-name");
         let cityTemp = document.getElementById("metric");
         let weatherMain = document.querySelectorAll("#weather-main");
@@ -36,7 +40,8 @@ navigator.geolocation.getCurrentPosition(async function (position) {
         tempMinWeather.innerHTML = Math.floor(data.list[0].main.temp_min) + "°";
         tempMaxWeather.innerHTML = Math.floor(data.list[0].main.temp_max) + "°";
 
-        let weatherCondition = data.list[0].weather[0].main.toLowerCase();
+       // showing today's max temperature  
+       let weatherCondition = data.list[0].weather[0].main.toLowerCase();
 
         if (weatherCondition === "rain") {
             weatherImg.src = "img/rain.png";
@@ -76,16 +81,21 @@ navigator.geolocation.getCurrentPosition(async function (position) {
 
         function displayForecast(data) {
             const dailyForecasts = {};
+
+           // creating an empty object used to collect one forecast per date:-
             let forecast = document.getElementById('future-forecast-box');
             let forecastbox = "";
 
+           // initalizes and string that will accumlate the html for all forecast boxes:-
             data.list.forEach(item => {
                 const date = item.dt_txt.split(' ')[0];
                 let dayName = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
                 let day = new Date(date).getDay();
 
+               // creating a date from the date string & gets the weekly number (0-6)
                 if (!dailyForecasts[date]) {
-                    dailyForecasts[date] = {
+                   // checks if an entry for the date iis not yet stored in daillyforecasts:- 
+                   dailyForecasts[date] = {
                         day_today: dayName[day],
                         temperature: Math.floor(item.main.temp) + "°",
                         description: item.weather[0].description,
@@ -97,6 +107,7 @@ navigator.geolocation.getCurrentPosition(async function (position) {
             for (const date in dailyForecasts) {
                 let imgSrc = "";
 
+               // switch statement for diff diff cases of weather:-
                 switch (dailyForecasts[date].weatherImg) {
                     case "rain":
                         imgSrc = "img/rain.png";
@@ -153,4 +164,5 @@ navigator.geolocation.getCurrentPosition(async function (position) {
     alert("Please turn on your location and refresh the page");
 
     
+
   });
