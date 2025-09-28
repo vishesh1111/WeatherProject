@@ -1,7 +1,10 @@
 let apiKey = "1e3e8f230b6064d27976e41163a82b77";
 let searchinput = document.querySelector(`.searchinput`);
 
+
+// this function accepts city, state, country:-
 async function search(city, state, country){
+    // calls the weather api 
     let url = await fetch(`https://api.openweathermap.org/data/2.5/weather?units=metric&q=${city},${state},${country}&appid=${apiKey}`);
 
     if(url.ok){
@@ -26,6 +29,8 @@ async function search(city, state, country){
     document.querySelector(".sunrise").innerHTML =  new Date(data.sys.sunrise * 1000).toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
     document.querySelector(".sunset").innerHTML =  new Date(data.sys.sunset * 1000).toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
 
+
+        // work accordingly to diff diff weather condition:-
     if (data.weather[0].main === "Rain") {
         weatherImg.src = "img/rain.png";
       } else if (data.weather[0].main === "Clear") {
@@ -47,7 +52,9 @@ async function search(city, state, country){
       } else if (data.weather[0].main === "Thunderstorm") {
         weatherImg.src = "img/thunderstorm.png";
       }
-    } else {
+    } 
+    // if the url.ok is false then this will be executed also shows error message:-
+    else {
       let box = document.querySelector(".return");
       box.style.display = "none";
 
@@ -59,10 +66,11 @@ async function search(city, state, country){
     }
 }
 
-
+// searches for keyword events in input box
 searchinput.addEventListener('keydown', function(event) {
     if (event.keyCode === 13 || event.which === 13) {
         search(searchinput.value);
         console.log("worked")
       }
+
   });
