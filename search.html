@@ -92,10 +92,12 @@
 window.addEventListener('DOMContentLoaded', function() {
   const popup = document.getElementById('notification-popup');
   const closeBtn = document.getElementById('close-popup');
-  popup.style.display = 'block';
-  closeBtn.onclick = function() {
-    popup.style.display = 'none';
-  };
+  if (popup && closeBtn) {
+    popup.style.display = 'block';
+    closeBtn.onclick = function() {
+      popup.style.display = 'none';
+    };
+  }
 });
 </script>
 </body>

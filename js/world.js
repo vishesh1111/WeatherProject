@@ -1,4 +1,10 @@
 let apiKey = import.meta.env.VITE_API_KEY;
+
+// Validate API key
+if (!apiKey || apiKey === 'your_api_key_here') {
+    console.error('Missing or invalid API key. Please check your .env file configuration.');
+}
+
 let searchinput = document.querySelector(".searchinput");
 let box = document.querySelector(".box");
 let normalMessage = document.querySelector(".normal-message");
