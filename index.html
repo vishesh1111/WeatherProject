@@ -11,35 +11,118 @@
   />
   <link rel="stylesheet" href="css/style.css" />
   <!-- Title -->
-  <title>Weather App Project</title>
+  <title>Weather App</title>
 </head>
 
 <body>
+  <!-- Animated Background Particles -->
+  <div class="particles" id="particles"></div>
+  
   <!-- main section -->
   <div id="screen">
+    <!-- Header with Time & Theme Toggle -->
+    <div class="header-section">
+      <div class="current-time">
+        <i class="fa-regular fa-clock"></i>
+        <span id="live-time">00:00</span>
+      </div>
+      <div class="current-date" id="live-date">Loading...</div>
+      <button class="theme-toggle" id="theme-toggle" title="Toggle Theme">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+    
+    <!-- Search bar -->
+    <div class="main-search">
+      <input type="text" id="main-search-input" placeholder="Search any city..." />
+      <button id="main-search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+      <button id="refresh-location-btn" title="Use my location"><i class="fa-solid fa-location-crosshairs"></i></button>
+    </div>
+    
     <!-- city name -->
     <div class="city-name">
       <i class="fa-solid fa-map-pin"></i>
-      <h1 id="city-name">Dwarka</h1>
+      <h1 id="city-name">Loading...</h1>
+      <span class="country-code" id="country-code"></span>
     </div>
+    
     <!-- weather icon -->
     <div class="weather-icon-css">
       <img class="weather-icon" src="img/sun.png" />
     </div>
+    
     <!-- weather details -->
     <div class="weather-description">
       <div class="show-metric" id="metric">0°</div>
       <div class="weather-details">
         <div class="weather-main" id="weather-main">Sunny</div>
         <div class="h-f">
-          <div class="show-humidity">H: <span id="humidity">60</span></div>
-          ||
-          <div class="show-humidity">
-            F: <span id="feels-like">60</span>
+          <div class="detail-item">
+            <i class="fa-solid fa-droplet"></i>
+            <span id="humidity">60</span>%
+          </div>
+          <div class="detail-item">
+            <i class="fa-solid fa-temperature-half"></i>
+            <span id="feels-like">60</span>°
           </div>
         </div>
       </div>
     </div>
+    
+    <!-- Weather Stats Grid -->
+    <div class="weather-stats">
+      <div class="stat-card">
+        <i class="fa-solid fa-wind"></i>
+        <div class="stat-info">
+          <span class="stat-value" id="wind-speed">0</span>
+          <span class="stat-label">km/h Wind</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <i class="fa-solid fa-eye"></i>
+        <div class="stat-info">
+          <span class="stat-value" id="visibility">0</span>
+          <span class="stat-label">km Visibility</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <i class="fa-solid fa-gauge-high"></i>
+        <div class="stat-info">
+          <span class="stat-value" id="pressure">0</span>
+          <span class="stat-label">hPa Pressure</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <i class="fa-solid fa-cloud"></i>
+        <div class="stat-info">
+          <span class="stat-value" id="clouds">0</span>
+          <span class="stat-label">% Clouds</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Sunrise/Sunset -->
+    <div class="sun-times">
+      <div class="sun-item sunrise">
+        <i class="fa-solid fa-sun"></i>
+        <div>
+          <span class="sun-label">Sunrise</span>
+          <span class="sun-value" id="sunrise">--:--</span>
+        </div>
+      </div>
+      <div class="sun-progress">
+        <div class="sun-progress-bar" id="sun-progress-bar"></div>
+        <div class="sun-icon-indicator" id="sun-indicator">☀️</div>
+      </div>
+      <div class="sun-item sunset">
+        <i class="fa-regular fa-moon"></i>
+        <div>
+          <span class="sun-label">Sunset</span>
+          <span class="sun-value" id="sunset">--:--</span>
+        </div>
+      </div>
+    </div>
+    
     <!-- Today-forecast -->
     <div class="forcasts-box">
       <div class="today-forecast">
@@ -60,6 +143,19 @@
         <div id="future-forecast-box"></div>
       </div>
     </div>
+    
+    <!-- Hourly Forecast -->
+    <div class="hourly-forecast">
+      <h5><i class="fa-regular fa-clock"></i> HOURLY FORECAST</h5>
+      <div id="hourly-forecast-box"></div>
+    </div>
+    
+    <!-- Weather Tips -->
+    <div class="weather-tip" id="weather-tip">
+      <i class="fa-solid fa-lightbulb"></i>
+      <span id="tip-text">Loading weather tips...</span>
+    </div>
+    
     <!-- nav section -->
     <nav>
       <ul>
@@ -83,8 +179,10 @@
   <!-- Notification Popup -->
   <div id="notification-popup" class="notification-popup">
     <div class="notification-content">
-      <p>Welcome to the Weather App ❤️❤️!</p>
-      <button id="close-popup">Close</button>
+      <div class="notification-icon">🌤️</div>
+      <p>Welcome to Weather App!</p>
+      <span class="notification-sub">Get real-time weather updates</span>
+      <button id="close-popup">Got it!</button>
     </div>
   </div>
 
@@ -92,13 +190,35 @@
   <script type="module" src="js/main.js"></script>
   <script>
     window.addEventListener('DOMContentLoaded', function() {
+      // Show welcome popup only on first visit
+      const hasVisited = localStorage.getItem('weatherAppVisited');
       const popup = document.getElementById('notification-popup');
       const closeBtn = document.getElementById('close-popup');
-      if (popup && closeBtn) {
-        popup.style.display = 'block';
+      
+      if (!hasVisited && popup && closeBtn) {
+        setTimeout(() => {
+          popup.style.display = 'block';
+        }, 1000);
+        
         closeBtn.onclick = function() {
-          popup.style.display = 'none';
+          popup.style.animation = 'slideUp 0.3s ease reverse';
+          setTimeout(() => {
+            popup.style.display = 'none';
+            localStorage.setItem('weatherAppVisited', 'true');
+          }, 300);
         };
+      }
+      
+      // Create particles
+      const particlesContainer = document.getElementById('particles');
+      for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        particle.style.animationDelay = Math.random() * 2 + 's';
+        particle.style.opacity = Math.random() * 0.5 + 0.2;
+        particlesContainer.appendChild(particle);
       }
     });
   </script>
