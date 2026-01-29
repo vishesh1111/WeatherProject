@@ -1,24 +1,50 @@
 let apiKey = import.meta.env.VITE_API_KEY;
-// public rest API2
 
+// Check if API key is configured
+if (!apiKey || apiKey === 'your_api_key_here') {
+    alert('Weather API key is not configured. Please add your OpenWeatherMap API key to the .env file.');
+    console.error('Missing or invalid API key. Please configure VITE_API_KEY in .env file.');
+}
+
+// Request user location permission
 navigator.geolocation.getCurrentPosition(async function (position) {
-
-
-   // calling the browser for geolocation api 
+    // calling the browser for geolocation api 
     try {
+        // Check API key again before making API calls
+        if (!apiKey || apiKey === 'your_api_key_here') {
+            throw new Error('API key is not configured');
+        }
+
         var lat = position.coords.latitude;
         var lon = position.coords.longitude;    
+        console.log(`User location obtained: Latitude ${lat}, Longitude ${lon}`);
+        
         //longitude and  latitude are used to get city name
-       
         var map = await fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=5&appid=${apiKey}`)
+        
+        if (!map.ok) {
+            throw new Error(`Failed to fetch location data: ${map.status} ${map.statusText}`);
+        }
+        
         var userdata = await map.json();
+        
+        if (!userdata || userdata.length === 0) {
+            throw new Error('Unable to determine location from coordinates');
+        }
         let loc = userdata[0].name;
+        console.log(`Location detected: ${loc}`);
+        
         //By using City name  we can get the weather details of that particular city from OpenWeatherMap API
         let url = `https://api.openweathermap.org/data/2.5/forecast?&units=metric&`;
         let respond = await fetch(url + `q=${loc}&` + `appid=${apiKey}`);
+        
+        if (!respond.ok) {
+            throw new Error(`Failed to fetch weather data: ${respond.status} ${respond.statusText}`);
+        }
+        
         let data = await respond.json();
 
-        console.log(data);
+        console.log('Weather data fetched successfully:', data);
         
         // displaying current weather info
         let cityMain = document.getElementById("city-name");
@@ -153,16 +179,33 @@ navigator.geolocation.getCurrentPosition(async function (position) {
 
             forecast.innerHTML = forecastbox;
 
-            console.log(data);
+            console.log('Forecast data displayed successfully');
         }
     } catch (error) {
-        console.error("An error occurred:", error);
+        console.error("An error occurred while fetching weather data:", error);
+        alert(`Unable to fetch weather data: ${error.message}. Please check your API key and internet connection.`);
     }
 },
-() => {
+(error) => {
     // Handle location retrieval error
-    alert("Please turn on your location and refresh the page");
-
+    console.error("Geolocation error:", error);
     
-
-  });
+    let errorMessage = "Unable to access your location. ";
+    
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            errorMessage += "Please grant location permission and refresh the page.";
+            break;
+        case error.POSITION_UNAVAILABLE:
+            errorMessage += "Location information is unavailable.";
+            break;
+        case error.TIMEOUT:
+            errorMessage += "The request to get your location timed out.";
+            break;
+        default:
+            errorMessage += "An unknown error occurred.";
+            break;
+    }
+    
+    alert(errorMessage);
+});
