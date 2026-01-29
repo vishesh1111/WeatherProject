@@ -1,20 +1,12 @@
-// API Key
+// Weather App - Main JavaScript
+// API Configuration
 const apiKey = '1e3e8f230b6064d27976e41163a82b77';
-
-// Default city when geolocation is not available
 const DEFAULT_CITY = "New Delhi";
 
-// Store current weather data globally
+// Global state
 let currentWeatherData = null;
 
-// Validate API key
-if (!apiKey) {
-    console.error('Missing API key.');
-}
-
-// ============================================
-// UTILITY FUNCTIONS
-// ============================================
+// Utility Functions
 
 // Format time from timestamp
 function formatTime(timestamp, timezone = 0) {
@@ -81,7 +73,7 @@ function getWeatherTip(weather, temp) {
         thunderstorm: [
             "⛈️ Stay indoors if possible",
             "🏠 Avoid outdoor activities today",
-            "⚡ Unplug sensitive electronics"
+            "Unplug sensitive electronics"
         ],
         mist: [
             "🌫️ Low visibility - drive with caution",
