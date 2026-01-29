@@ -6,10 +6,15 @@ if (!apiKey || apiKey === 'your_api_key_here') {
 }
 
 let searchinput = document.querySelector(".searchinput");
-let box = document.querySelector(".box");
 let normalMessage = document.querySelector(".normal-message");
 let errorMessage = document.querySelector(".error-message");
 let addedMessage = document.querySelector(".added-message");
+
+// Create the box container element and append to city-box
+let cityBox = document.querySelector(".city-box");
+let box = document.createElement("div");
+box.className = "box";
+cityBox.appendChild(box);
 
 // Function to get the date
 let date = new Date().getDate();
@@ -41,14 +46,6 @@ async function city(cityName) {
   if (url.ok) {
     let data = await url.json();
     console.log(data);
-
-    let cityBox = document.querySelector(".city-box");
-
-    if (!box) {
-      box = document.createElement("div");
-      box.className = "box";
-      cityBox.appendChild(box);
-    }
 
     let weatherBox = document.createElement("div");
     weatherBox.className = "weather-box";
@@ -128,12 +125,12 @@ searchinput.addEventListener("keydown", async function (event) {
       normalMessage.style.display = "none";
       errorMessage.style.display = "none";
       addedMessage.style.display = "block";
+      box.prepend(weatherInfo);
     } else {
       normalMessage.style.display = "none";
       errorMessage.style.display = "block";
       addedMessage.style.display = "none";
     }
-    box.prepend(weatherInfo);
   }
 });
 
