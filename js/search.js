@@ -1,4 +1,4 @@
-let apiKey = import.meta.env.VITE_API_KEY;
+const apiKey = '1e3e8f230b6064d27976e41163a82b77';
 
 // Validate API key
 if (!apiKey || apiKey === 'your_api_key_here') {
