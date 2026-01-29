@@ -1,4 +1,4 @@
-let apiKey = "1e3e8f230b6064d27976e41163a82b77";
+let apiKey = import.meta.env.VITE_API_KEY;
 // public rest API2
 
 navigator.geolocation.getCurrentPosition(async function (position) {
