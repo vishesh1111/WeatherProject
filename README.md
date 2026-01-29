@@ -55,7 +55,6 @@ npm run preview
 
 ## Security
 
-The API key is stored in a `.env` file and is not committed to version control. Make sure to:
-- Never commit your `.env` file
-- Use the `.env.example` file as a template
-- Keep your API key secure
+The API key is stored in a `.env` file which is automatically excluded from version control via `.gitignore`. Make sure to:
+- Use the `.env.example` file as a template for your own `.env` file
+- Keep your API key secure and never share it publicly

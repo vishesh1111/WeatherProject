@@ -11,8 +11,5 @@ export default defineConfig({
         world: './world.html'
       }
     }
-  },
-  define: {
-    'process.env.API_KEY': JSON.stringify(process.env.VITE_API_KEY)
   }
 });
