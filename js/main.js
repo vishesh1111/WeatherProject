@@ -1,4 +1,5 @@
-let apiKey = import.meta.env.VITE_API_KEY;
+// API Key - Use environment variable if available, otherwise use fallback for production
+let apiKey = import.meta.env.VITE_API_KEY || '1e3e8f230b6064d27976e41163a82b77';
 
 // Default city when geolocation is not available
 const DEFAULT_CITY = "New Delhi";
@@ -7,8 +8,8 @@ const DEFAULT_CITY = "New Delhi";
 let currentWeatherData = null;
 
 // Validate API key
-if (!apiKey || apiKey === 'your_api_key_here') {
-    console.error('Missing or invalid API key. Please check your .env file configuration.');
+if (!apiKey) {
+    console.error('Missing API key.');
 }
 
 // ============================================
