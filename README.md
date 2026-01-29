@@ -6,7 +6,7 @@ A weather application that displays current weather and forecast information usi
 
 - **Automatic Location Detection**: Uses browser geolocation to detect your current location
 - **Current Weather Display**: Shows temperature, weather conditions, humidity, and feels-like temperature
-- **6-Day Forecast**: Displays weather predictions for the next 6 days
+- **Weather Forecast**: Displays weather predictions for upcoming days
 - **City Search**: Search weather by city name (on search page)
 - **World Weather**: Track multiple cities (on world page)
 

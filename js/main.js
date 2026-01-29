@@ -81,13 +81,13 @@ navigator.geolocation.getCurrentPosition(async function (position) {
         } else if (weatherCondition === "clouds" || weatherCondition === "smoke") {
             weatherImg.src = "img/cloud.png";
             weatherImgs.src = "img/cloud.png";
-        } else if (weatherCondition === "mist" || weatherCondition === "Fog") {
+        } else if (weatherCondition === "mist" || weatherCondition === "fog") {
             weatherImg.src = "img/mist.png";
             weatherImgs.src = "img/mist.png";
         } else if (weatherCondition === "haze") {
             weatherImg.src = "img/haze.png";
             weatherImgs.src = "img/haze.png";
-        } else if (data.weather[0].main === "Thunderstorm") {
+        } else if (weatherCondition === "thunderstorm") {
             weatherImg.src = "img/thunderstorm.png";
             weatherImgs.src = "img/thunderstorm.png";
         }
